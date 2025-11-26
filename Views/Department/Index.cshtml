@@ -1,0 +1,83 @@
+﻿@using System.Data
+@{
+    ViewData["Title"] = "Department List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Department</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-controller="HomeMaster" asp-action="Index">Home</a>
+                </li>
+                <li class="breadcrumb-item active">Department List</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex justify-content-end mb-2">
+            <a class="btn btn-outline-primary" asp-controller="Department" asp-action="AddEdit">
+                Add Department
+            </a>
+        </div>
+    </div>
+
+    <input type="text" class="form-control mb-3" id="searchBox" placeholder="Search">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Department Name</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="tableRows">
+            @if (Model != null)
+            {
+                foreach (DataRow row in Model.Rows)
+                {
+                    <tr>
+                        <td>@row["DepartmentName"]</td>
+
+                        <td class="text-center">
+                            <a class="btn btn-outline-success btn-sm"
+                               asp-controller="Department" asp-action="AddEdit"
+                               asp-route-DeptID="@row["DeptID"]">Edit</a>
+
+                            <a class="btn btn-outline-danger btn-sm"
+                               asp-controller="Department" asp-action="Delete"
+                               asp-route-DeptID="@row["DeptID"]"
+                               onclick="return confirm('Delete this department?');">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</main>
+
+@section Scripts {
+    <script>
+        $("#searchBox").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tableRows tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    </script>
+}

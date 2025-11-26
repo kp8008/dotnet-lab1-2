@@ -1,0 +1,71 @@
+@model Lab1.Models.EmployeeModel
+@{
+    bool isEdit = Model?.EmpID > 0;
+    ViewData["Title"] = isEdit ? "Edit Employee" : "Add Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-controller="Employee" asp-action="Index">Employee</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="AddEdit" method="post" class="row g-3 mt-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="EmpID" />
+
+                <div class="col-md-6">
+                    <label asp-for="EmpName" class="form-label"></label>
+                    <input asp-for="EmpName" class="form-control" placeholder="Enter employee name" />
+                    <span asp-validation-for="EmpName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="DeptID" class="form-label">Department</label>
+                    <select asp-for="DeptID" asp-items="ViewBag.DepartmentList" class="form-select">
+                        <option value="">-- Select Department --</option>
+                    </select>
+                    <span asp-validation-for="DeptID" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Salary" class="form-label"></label>
+                    <input asp-for="Salary" class="form-control" placeholder="Enter salary" />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="JoiningDate" class="form-label"></label>
+                    <input asp-for="JoiningDate" type="date" class="form-control" />
+                    <span asp-validation-for="JoiningDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" placeholder="Enter city" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
